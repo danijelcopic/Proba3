@@ -109,7 +109,7 @@ public class SecondActivity extends AppCompatActivity {
                     boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
 
                     if (toast) {
-                        Toast.makeText(SecondActivity.this, "Note is deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SecondActivity.this, "Real Estate is deleted", Toast.LENGTH_SHORT).show();
                     }
 
 

@@ -1,12 +1,17 @@
 package rs.aleph.android.example13.activities.activity;
 
 import android.app.Dialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +29,7 @@ import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +41,9 @@ import rs.aleph.android.example13.R;
 import rs.aleph.android.example13.activities.db.DatabaseHelper;
 import rs.aleph.android.example13.activities.db.model.RealEstate;
 import rs.aleph.android.example13.activities.dialogs.AboutDialog;
+import rs.aleph.android.example13.activities.picture.InsertPicture;
 
+import static android.R.attr.y;
 import static android.R.string.ok;
 
 
@@ -58,6 +66,10 @@ public class FirstActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_activity);
+
+
+        // test metoda
+        //addImageToGallery("apples.jpg", FirstActivity.this);
 
 
         // TOOLBAR
@@ -127,6 +139,8 @@ public class FirstActivity extends AppCompatActivity {
 
             case R.id.action_add: // otvara se dialog za upis u bazu
 
+
+               // MediaStore.Images.Media.insertImage(getContentResolver(), "", "jabuke" , "opis");
 
                 final Dialog dialog = new Dialog(FirstActivity.this); // aktiviramo dijalog
                 dialog.setContentView(R.layout.dialog_realestate);
@@ -209,7 +223,7 @@ public class FirstActivity extends AppCompatActivity {
 
 
                         if (preview == null || imagePath == null){
-                            Toast.makeText(FirstActivity.this, "Must be choose", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FirstActivity.this, "Picture must be choose", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -234,7 +248,7 @@ public class FirstActivity extends AppCompatActivity {
                             boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
 
                             if (toast) {
-                                Toast.makeText(FirstActivity.this, "New note is added", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FirstActivity.this, "New Real Estate is added", Toast.LENGTH_SHORT).show();
                             }
 
                             refresh(); // osvezavanje baze
@@ -257,7 +271,7 @@ public class FirstActivity extends AppCompatActivity {
                         boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
 
                         if (toast) {
-                            Toast.makeText(FirstActivity.this, "New note is canceled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FirstActivity.this, "New Real Estate is canceled", Toast.LENGTH_SHORT).show();
                         }
 
                         refresh(); // osvezavanje baze
@@ -328,6 +342,43 @@ public class FirstActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
     }
+
+
+    // sistemska metoda koja se automatski poziva kada se aktivnost startuje u startActivityForResult rezimu   (slika)
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                    if (selectedImageUri != null){
+                        imagePath = selectedImageUri.toString();
+                    }
+
+                    if (preview != null){
+                        preview.setImageBitmap(bitmap);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    // test metoda .... proba upisa slike u MediaStore !!!!!!
+    public static void addImageToGallery(final String filePath, final Context context) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.MediaColumns.DATA, filePath);
+
+        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+
 
 
     // kompatibilnost u nazad
