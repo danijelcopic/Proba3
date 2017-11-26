@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:orientation="vertical">
+
+    <!-- unos naziva -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_name"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/input_realestate_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+
+    <!-- unos opisa -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_description"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/input_realestate_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+
+    <!-- unos slike  -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/label_picture"
+            android:layout_height="wrap_content"
+            android:text="@string/label_pictures"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/btn_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label_picture"
+            android:textSize="14dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/btn_choose"/>
+
+        <ImageView
+            android:id="@+id/preview_image"
+            android:foregroundGravity="center_horizontal"
+            android:layout_toRightOf="@+id/btn_choose"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+
+    </RelativeLayout>
+
+    <!-- unos adrese -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_address"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/input_realestate_address"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <!-- unos telefona -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_phone"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/input_realestate_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <!-- unos kvadrature -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_square"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/input_realestate_square"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="numberDecimal"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <!-- unos broja soba -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_rooms"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/input_realestate_rooms"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="numberDecimal"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+
+    <!-- unos cene -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_price"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/input_realestate_price"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="numberDecimal"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Save i Cancel button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

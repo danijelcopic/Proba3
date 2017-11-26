@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- application -->
+    <string name="app_name">Real Estate</string>
+
+    <!-- settings -->
+    <string name="activity_settings_name">Settings</string>
+
+    <!-- toolbar1 -->
+    <string name="first_action_add">Add</string>
+    <string name="first_action_about">About</string>
+
+    <!-- toolbar2 -->
+    <string name="second_action_edit">Edit</string>
+    <string name="second_action_delete">Delete</string>
+
+    <!-- navigation drawer -->
+    <string name="drawer_open">Open Navigation Drawer</string>
+    <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="drawer_home">Home</string>
+    <string name="drawer_home_long">Show All Products</string>
+    <string name="drawer_settings">Settings</string>
+    <string name="drawer_Settings_long">Change App Settings</string>
+    <string name="drawer_about">About</string>
+    <string name="drawer_about_long">About Us</string>
+
+
+    <!-- about -->
+    <string name="dialog_about_ok">OK</string>
+    <string name="dialog_about_cancel">CANCEL</string>
+    <string name="dialog_about_title">AUTHOR:</string>
+    <string name="dialog_about_message">Danijel Copic</string>
+
+
+    <!-- settings toast -->
+    <string name="pref_toast">pref_toast</string>
+    <string name="pref_toast_title">Allow Toast</string>
+    <string name="pref_toast_summary">Toast notification</string>
+
+    <!-- settings notification -->
+    <string name="pref_notification">pref_notification</string>
+    <string name="pref_notification_title">Allow Notification</string>
+    <string name="pref_notification_summary">Statusbar notification</string>
+
+    <!-- dialog -->
+    <string name="label_name">NAME:</string>
+    <string name="label_description">DESCRIPTION:</string>
+    <string name="label_pictures">PICTURE</string>
+
+    <string name="save">SAVE</string>
+    <string name="cancel">CANCEL</string>
+    <string name="btn_choose">CHOOSE</string>
+    <string name="label_address">ADDRESS:</string>
+    <string name="label_phone">PHONE:</string>
+    <string name="label_square">SQUARE:</string>
+    <string name="label_rooms">Nr. ROOMS:</string>
+    <string name="label_price">PRICE:</string>
+
+
+</resources>
