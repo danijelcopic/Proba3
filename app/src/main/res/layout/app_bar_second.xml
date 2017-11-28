@@ -95,6 +95,8 @@
                 android:id="@+id/picture"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:clickable="true"
+                android:onClick="fullImage"
                 android:layout_marginTop="16dp" />
 
 

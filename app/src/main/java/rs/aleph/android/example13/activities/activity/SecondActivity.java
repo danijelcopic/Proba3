@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -41,7 +42,6 @@ import java.sql.SQLException;
 import rs.aleph.android.example13.R;
 import rs.aleph.android.example13.activities.db.DatabaseHelper;
 import rs.aleph.android.example13.activities.db.model.RealEstate;
-
 
 
 import static rs.aleph.android.example13.activities.activity.FirstActivity.NOTIF_TOAST;
@@ -57,6 +57,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     private RealEstate realEstate;
     private SharedPreferences preferences;
     private AlertDialog dialogAlert;
+    private Context context;
 
 
     // za izbor slike u dijalogu
@@ -173,6 +174,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             rePrice.setText(stringPrice);
 
 
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -204,6 +206,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
             }
         });
+
+
+
     }
 
 
@@ -613,6 +618,37 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
+
+
+
+
+
+    // picasso .... full image
+    public void fullImage(View view) {
+        final Dialog dialog = new Dialog(SecondActivity.this);
+        dialog.setContentView(R.layout.fullimage);
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.full_image);
+        Uri mUri = Uri.parse(realEstate.getmPictures());
+
+        Picasso.with(SecondActivity.this).load(mUri).into(image);
+
+        Button close = (Button) dialog.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    private void reset(){
+        imagePath = "";
+        preview = null;
+    }
 
 
     @Override
