@@ -26,4 +26,11 @@
     <string name="label_square">SQUARE:</string>
     <string name="label_rooms">Nr. ROOMS:</string>
     <string name="label_price">PRICE:</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="tour">TOUR</string>
+
+    <string name="notification_title">Tour scheduled</string>
+    <string name="notification_text">Tour scheduled during the next week.</string>
 </resources>

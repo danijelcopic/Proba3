@@ -1,17 +1,21 @@
 package rs.aleph.android.example13.activities.activity;
 
 import android.app.Dialog;
-import android.content.ContentValues;
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,51 +35,70 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import rs.aleph.android.example13.R;
 import rs.aleph.android.example13.activities.db.DatabaseHelper;
 import rs.aleph.android.example13.activities.db.model.RealEstate;
 import rs.aleph.android.example13.activities.dialogs.AboutDialog;
-import rs.aleph.android.example13.activities.picture.InsertPicture;
-
-import static android.R.attr.y;
-import static android.R.string.ok;
 
 
-public class FirstActivity extends AppCompatActivity {
+public class FirstActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    private static final int SELECT_PICTURE = 1;
     public static String NOTIF_TOAST = "pref_toast";
     public static String NOTIF_STATUS = "pref_notification";
-
     private DatabaseHelper databaseHelper;
     private AlertDialog dialogAlert;
     private SharedPreferences preferences;
 
+
     // za izbor slike u dijalogu
     private ImageView preview;
     private String imagePath = null;
-    private static final int SELECT_PICTURE = 1;
+
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.first_activity);
-
-
-        // test metoda
-        //addImageToGallery("apples.jpg", FirstActivity.this);
+        setContentView(R.layout.activity_first);
 
 
         // TOOLBAR
         // aktiviranje toolbara
         Toolbar toolbar = (Toolbar) findViewById(R.id.first_toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.BLACK);
+
+
+        // Navigation Drawer
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        // prikazivanje strelice u nazad u toolbaru ... mora se u manifestu definisati zavisnost parentActivityName
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer);
+            actionBar.show();
+        }
 
 
         // status podesavanja
@@ -126,7 +149,7 @@ public class FirstActivity extends AppCompatActivity {
     // prikaz menija
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.first_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_first, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -139,8 +162,6 @@ public class FirstActivity extends AppCompatActivity {
 
             case R.id.action_add: // otvara se dialog za upis u bazu
 
-
-               // MediaStore.Images.Media.insertImage(getContentResolver(), "", "jabuke" , "opis");
 
                 final Dialog dialog = new Dialog(FirstActivity.this); // aktiviramo dijalog
                 dialog.setContentView(R.layout.dialog_realestate);
@@ -222,11 +243,10 @@ public class FirstActivity extends AppCompatActivity {
                         }
 
 
-                        if (preview == null || imagePath == null){
+                        if (preview == null || imagePath == null) {
                             Toast.makeText(FirstActivity.this, "Picture must be choose", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
 
 
                         RealEstate realEstate = new RealEstate();
@@ -240,12 +260,12 @@ public class FirstActivity extends AppCompatActivity {
                         realEstate.setmPrice(price);
 
 
-
                         try {
                             getDatabaseHelper().getmRealEstateDao().create(realEstate);
 
                             //provera podesavanja
                             boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
+                            boolean status = preferences.getBoolean(NOTIF_STATUS, false);
 
                             if (toast) {
                                 Toast.makeText(FirstActivity.this, "New Real Estate is added", Toast.LENGTH_SHORT).show();
@@ -269,6 +289,7 @@ public class FirstActivity extends AppCompatActivity {
 
                         //provera podesavanja
                         boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
+                        boolean status = preferences.getBoolean(NOTIF_STATUS, false);
 
                         if (toast) {
                             Toast.makeText(FirstActivity.this, "New Real Estate is canceled", Toast.LENGTH_SHORT).show();
@@ -336,7 +357,7 @@ public class FirstActivity extends AppCompatActivity {
 
 
     // metoda za izbor slike
-    private void selectPicture(){
+    private void selectPicture() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -352,11 +373,11 @@ public class FirstActivity extends AppCompatActivity {
 
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    if (selectedImageUri != null){
+                    if (selectedImageUri != null) {
                         imagePath = selectedImageUri.toString();
                     }
 
-                    if (preview != null){
+                    if (preview != null) {
                         preview.setImageBitmap(bitmap);
                     }
                 } catch (IOException e) {
@@ -366,22 +387,38 @@ public class FirstActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-    // test metoda .... proba upisa slike u MediaStore !!!!!!
-    public static void addImageToGallery(final String filePath, final Context context) {
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-        ContentValues values = new ContentValues();
+        if (id == R.id.nav_list) {
 
-        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(MediaStore.MediaColumns.DATA, filePath);
+        } else if (id == R.id.nav_settings) {
 
-        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            Intent intent = new Intent(FirstActivity.this, SettingsActivity.class);  // saljemo intent Settings.class
+            startActivity(intent);
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 
 
-    // kompatibilnost u nazad
     @Override
     public void setTitle(CharSequence title) {
         getSupportActionBar().setTitle(title);

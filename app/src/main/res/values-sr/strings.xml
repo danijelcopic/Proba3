@@ -26,4 +26,11 @@
     <string name="label_square">KVADRATURA::</string>
     <string name="label_rooms">Br. SOBA:</string>
     <string name="label_price">CENA:</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="tour">TOUR</string>
+
+    <string name="notification_title">Tour scheduled</string>
+    <string name="notification_text">Tour scheduled during the next week.</string>
 </resources>
