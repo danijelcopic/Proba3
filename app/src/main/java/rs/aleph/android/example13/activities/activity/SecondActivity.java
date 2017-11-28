@@ -51,6 +51,7 @@ import static rs.aleph.android.example13.activities.activity.FirstActivity.NOTIF
 public class SecondActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int SELECT_PICTURE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 0;
     private static int NOTIFICATION_ID = 1;
     private int position = 0;
     private DatabaseHelper databaseHelper;
@@ -58,17 +59,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     private SharedPreferences preferences;
     private AlertDialog dialogAlert;
     private Context context;
-
-
     // za izbor slike u dijalogu
     private ImageView preview;
     private String imagePath = null;
-
-
-    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 0;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +76,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         toolbar.setTitleTextColor(Color.BLACK);
 
 
-
         // Navigation Drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -93,7 +85,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
 
         // prikazivanje strelice u nazad u toolbaru ... mora se u manifestu definisati zavisnost parentActivityName
@@ -174,7 +165,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             rePrice.setText(stringPrice);
 
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -208,13 +198,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         });
 
 
-
     }
-
-
-
-
-
 
 
     // MENU
@@ -264,17 +248,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     // Navigation Drawer ... u kom je stanju ... prikazan ili ne, pa da se vrati ili otvori
     @Override
     public void onBackPressed() {
@@ -285,7 +258,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             super.onBackPressed();
         }
     }
-
 
 
     // sta se desi kada kliknemo na stavke iz Notification Drawera
@@ -314,15 +286,8 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-
-
-
-
-
-
-
     /**
-     *  EDIT podataka
+     * EDIT podataka
      */
 
     // pozivamo pri izmeni podataka ....
@@ -357,7 +322,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         reDescription.setText(realEstate.getmName());
 
         // TODO: ovde moram videti za ponovni izbor slike
-
 
 
         reAddress.setText(realEstate.getmAddress());
@@ -494,11 +458,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-
-
-
-
-
     // //provera podesavanja (toast ili notification bar) .... ovo pozivamo kada kliknemo na ikonicu u Tolbaru
     private void showMessage(String message) {
 
@@ -515,11 +474,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-
-
-
-
-
     // prikazivanje poruka u notification baru (status bar)
     private void showStatusMesage(String message) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -534,14 +488,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         notificationManager.notify(1, builder.build());
     }
-
-
-
-
-
-
-
-
 
 
     // metoda za izbor slike
@@ -576,14 +522,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-
-
-
-
-
-
-
-
     //Metoda koja komunicira sa bazom podataka
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -591,8 +529,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         }
         return databaseHelper;
     }
-
-
 
 
     // pokretanje phone aplikacije
@@ -604,7 +540,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
 
         //provera permissiona
-        if (ActivityCompat.checkSelfPermission(SecondActivity.this,android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(SecondActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(SecondActivity.this,
                     android.Manifest.permission.CALL_PHONE)) {
             } else {
@@ -616,11 +552,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         startActivity(callIntent);
     }
-
-
-
-
-
 
 
     // picasso .... full image
@@ -645,7 +576,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
     }
 
-    private void reset(){
+    private void reset() {
         imagePath = "";
         preview = null;
     }
