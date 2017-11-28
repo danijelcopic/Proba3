@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -59,6 +60,8 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     private SharedPreferences preferences;
     private AlertDialog dialogAlert;
     private Context context;
+
+
     // za izbor slike u dijalogu
     private ImageView preview;
     private String imagePath = null;
@@ -114,7 +117,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
             String description = realEstate.getmDescription();
 
-            // String picture = realEstate.getmPictures();
+            //String picture = realEstate.getmPictures();
 
             String address = realEstate.getmAddress();
 
@@ -132,36 +135,37 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
 
             // name
-            TextView reName = (TextView) findViewById(R.id.input_realestate_name);
+            TextView reName = (TextView) findViewById(R.id.realestate_name);
             reName.setText(name);
 
             // description
-            TextView reDescription = (TextView) findViewById(R.id.input_realestate_description);
+            TextView reDescription = (TextView) findViewById(R.id.realestate_description);
             reDescription.setText(description);
 
             // picture
             ImageView imageView = (ImageView) findViewById(R.id.picture);
             Uri mUri = Uri.parse(realEstate.getmPictures());
             imageView.setImageURI(mUri);
+            reset();
 
             // address
-            TextView reAddress = (TextView) findViewById(R.id.input_realestate_address);
+            TextView reAddress = (TextView) findViewById(R.id.realestate_address);
             reAddress.setText(address);
 
             // phone
-            TextView rePhone = (TextView) findViewById(R.id.input_realestate_phone);
+            TextView rePhone = (TextView) findViewById(R.id.realestate_phone);
             rePhone.setText(stringPhone);
 
             // square
-            TextView reSquare = (TextView) findViewById(R.id.input_realestate_square);
+            TextView reSquare = (TextView) findViewById(R.id.realestate_square);
             reSquare.setText(stringSquare);
 
             // rooms
-            TextView reRooms = (TextView) findViewById(R.id.input_realestate_rooms);
+            TextView reRooms = (TextView) findViewById(R.id.realestate_rooms);
             reRooms.setText(stringRooms);
 
             // price
-            TextView rePrice = (TextView) findViewById(R.id.input_realestate_price);
+            TextView rePrice = (TextView) findViewById(R.id.realestate_price);
             rePrice.setText(stringPrice);
 
 
@@ -198,7 +202,15 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         });
 
 
+
+
+
     }
+
+
+
+
+
 
 
     // MENU
@@ -217,26 +229,15 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
             // kada pritisnemo ikonicu za brisanje
             case R.id.action_delete:
-                try {
-                    getDatabaseHelper().getmRealEstateDao().delete(realEstate);
-
-                    //provera podesavanja
-                    boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
-
-                    if (toast) {
-                        Toast.makeText(SecondActivity.this, "Real Estate is deleted", Toast.LENGTH_SHORT).show();
-                    }
 
 
-                    finish();
+                    // potvrda za brisanje ... otvara se dialod
+                    AlertDialog.Builder ab = new AlertDialog.Builder(this);
+                    ab.setMessage("Are you sure to delete?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
 
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
                 break;
 
-            // kada pritisnemo ikonicu za promenu
+            // kada pritisnemo ikonicu za editovanje
             case R.id.action_edit:
 
                 edit();
@@ -490,7 +491,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-    // metoda za izbor slike
+    // metoda za izbor slike pri editu
     private void selectPicture() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -576,6 +577,43 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
     }
 
+
+    // dialog za potvrdu za brisanje
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    try {
+                        getDatabaseHelper().getmRealEstateDao().delete(realEstate);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //provera podesavanja
+                    boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
+
+                    if (toast) {
+                        Toast.makeText(SecondActivity.this, "Real Estate is deleted", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    finish();
+
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialog.cancel();
+                    break;
+            }
+        }
+    };
+
+
+
+
+
+    // reset url slike
     private void reset() {
         imagePath = "";
         preview = null;

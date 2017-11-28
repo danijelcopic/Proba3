@@ -44,7 +44,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/input_realestate_name"
+                android:id="@+id/realestate_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp" />
@@ -68,7 +68,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/input_realestate_description"
+                android:id="@+id/realestate_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp" />
@@ -119,7 +119,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/input_realestate_address"
+                android:id="@+id/realestate_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp" />
@@ -143,7 +143,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/input_realestate_phone"
+                android:id="@+id/realestate_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="call"
@@ -168,7 +168,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/input_realestate_square"
+                android:id="@+id/realestate_square"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp" />
@@ -192,7 +192,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/input_realestate_rooms"
+                android:id="@+id/realestate_rooms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp" />
@@ -216,7 +216,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/input_realestate_price"
+                android:id="@+id/realestate_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp" />

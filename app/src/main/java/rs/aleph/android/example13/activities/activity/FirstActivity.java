@@ -2,6 +2,7 @@ package rs.aleph.android.example13.activities.activity;
 
 import android.app.Dialog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -123,7 +124,6 @@ public class FirstActivity extends AppCompatActivity implements NavigationView.O
 
         final ListView listView = (ListView) findViewById(R.id.list_first_activity); // definisemo u koji View saljemo podatke (listFirstActivity)
         ArrayAdapter<String> adapter = new ArrayAdapter<>(FirstActivity.this, R.layout.list_item, reName);  // definisemo kako ce izgledati jedna stavka u View (list_item)
-        refresh();
         listView.setAdapter(adapter);
 
 
@@ -427,6 +427,13 @@ public class FirstActivity extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+
+
+
+
 
 
 
