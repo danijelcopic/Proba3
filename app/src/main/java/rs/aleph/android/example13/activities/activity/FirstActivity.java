@@ -75,7 +75,7 @@ public class FirstActivity extends AppCompatActivity implements NavigationView.O
 
         // TOOLBAR
         // aktiviranje toolbara
-        Toolbar toolbar = (Toolbar) findViewById(R.id.first_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_first);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.BLACK);
 
@@ -121,9 +121,11 @@ public class FirstActivity extends AppCompatActivity implements NavigationView.O
             reName.add(i.getmName());
         }
 
-        final ListView listView = (ListView) findViewById(R.id.listFirstActivity); // definisemo u koji View saljemo podatke (listFirstActivity)
+        final ListView listView = (ListView) findViewById(R.id.list_first_activity); // definisemo u koji View saljemo podatke (listFirstActivity)
         ArrayAdapter<String> adapter = new ArrayAdapter<>(FirstActivity.this, R.layout.list_item, reName);  // definisemo kako ce izgledati jedna stavka u View (list_item)
+        refresh();
         listView.setAdapter(adapter);
+
 
 
         // sta se desi kada kliknemo na stavku iz liste
@@ -271,6 +273,8 @@ public class FirstActivity extends AppCompatActivity implements NavigationView.O
                                 Toast.makeText(FirstActivity.this, "New Real Estate is added", Toast.LENGTH_SHORT).show();
                             }
 
+                            reset();
+
                             refresh(); // osvezavanje baze
 
                         } catch (SQLException e) {
@@ -338,7 +342,7 @@ public class FirstActivity extends AppCompatActivity implements NavigationView.O
 
     // refresh() prikazuje novi sadrzaj.Povucemo nov sadrzaj iz baze i popunimo listu
     private void refresh() {
-        ListView listview = (ListView) findViewById(R.id.listFirstActivity);
+        ListView listview = (ListView) findViewById(R.id.list_first_activity);
         if (listview != null) {
             ArrayAdapter<RealEstate> adapter = (ArrayAdapter<RealEstate>) listview.getAdapter();
             if (adapter != null) {
@@ -353,6 +357,13 @@ public class FirstActivity extends AppCompatActivity implements NavigationView.O
                 }
             }
         }
+    }
+
+
+
+    private void reset(){
+        imagePath = "";
+        preview = null;
     }
 
 

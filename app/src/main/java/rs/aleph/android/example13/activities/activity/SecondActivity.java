@@ -1,20 +1,22 @@
 package rs.aleph.android.example13.activities.activity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,32 +36,27 @@ import android.widget.Toast;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import rs.aleph.android.example13.R;
 import rs.aleph.android.example13.activities.db.DatabaseHelper;
 import rs.aleph.android.example13.activities.db.model.RealEstate;
-import rs.aleph.android.example13.activities.dialogs.AboutDialog;
 
 
+import static android.R.attr.y;
+import static rs.aleph.android.example13.R.string.save;
 import static rs.aleph.android.example13.activities.activity.FirstActivity.NOTIF_TOAST;
 import static rs.aleph.android.example13.activities.activity.FirstActivity.NOTIF_STATUS;
 
 
 public class SecondActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private int position = 0;
-
+    private static final int SELECT_PICTURE = 1;
     private static int NOTIFICATION_ID = 1;
-
+    private int position = 0;
     private DatabaseHelper databaseHelper;
     private RealEstate realEstate;
     private SharedPreferences preferences;
-    private static final int SELECT_PICTURE = 1;
     private AlertDialog dialogAlert;
 
 
@@ -68,16 +65,23 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     private String imagePath = null;
 
 
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 0;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
+
         // TOOLBAR
         // aktiviranje toolbara 2 koji je drugaciji od onog iz prve aktivnosti
-        Toolbar toolbar = (Toolbar) findViewById(R.id.second_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_second);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.BLACK);
+
 
 
         // Navigation Drawer
@@ -89,6 +93,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
 
         // prikazivanje strelice u nazad u toolbaru ... mora se u manifestu definisati zavisnost parentActivityName
@@ -118,7 +123,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
             String description = realEstate.getmDescription();
 
-           // String picture = realEstate.getmPictures();
+            // String picture = realEstate.getmPictures();
 
             String address = realEstate.getmAddress();
 
@@ -133,7 +138,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
             double price = realEstate.getmPrice();
             String stringPrice = Double.toString(price);
-
 
 
             // name
@@ -175,13 +179,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         }
 
 
-
         // fab
         FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Creates notification with the notification builder
+                // kreiramo notifikaciju u builderu
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(SecondActivity.this);
                 Bitmap bitmap = BitmapFactory.decodeResource(SecondActivity.this.getResources(), R.drawable.ic_stat_tour);
                 builder.setSmallIcon(R.drawable.ic_stat_tour);
@@ -189,12 +192,21 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 builder.setContentText(SecondActivity.this.getString(R.string.notification_text));
                 builder.setLargeIcon(bitmap);
 
-                // Shows notification with the notification manager (notification ID is used to update the notification later on)
-                NotificationManager manager = (NotificationManager)SecondActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.notify(NOTIFICATION_ID, builder.build());
+                // provera podesavanja
+                boolean status = preferences.getBoolean(NOTIF_STATUS, false);
+
+                if (status) {
+
+                    // prikaz u status baru (notification bar)
+                    NotificationManager manager = (NotificationManager) SecondActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+                    manager.notify(NOTIFICATION_ID, builder.build());
+
+                }
+
             }
         });
     }
+
 
 
 
@@ -248,7 +260,18 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-    // Navigation Drawer
+
+
+
+
+
+
+
+
+
+
+
+    // Navigation Drawer ... u kom je stanju ... prikazan ili ne, pa da se vrati ili otvori
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -259,10 +282,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+
+
+    // sta se desi kada kliknemo na stavke iz Notification Drawera
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_list) {
@@ -289,8 +315,14 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
 
 
+
+
+    /**
+     *  EDIT podataka
+     */
+
     // pozivamo pri izmeni podataka ....
-    private void edit(){
+    private void edit() {
 
         final Dialog dialog = new Dialog(SecondActivity.this); // aktiviramo dijalog
         dialog.setContentView(R.layout.dialog_realestate);
@@ -323,10 +355,11 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         // TODO: ovde moram videti za ponovni izbor slike
 
 
+
         reAddress.setText(realEstate.getmAddress());
 
-        double phone = realEstate.getmPhone();
-        String stringPhone = Double.toString(phone);
+        int phone = realEstate.getmPhone();
+        String stringPhone = Integer.toString(phone);
         rePhone.setText(stringPhone);
 
         double square = realEstate.getmPhone();
@@ -340,7 +373,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         double price = realEstate.getmPhone();
         String stringPrice = Double.toString(price);
         rePrice.setText(stringPrice);
-
 
 
         // save
@@ -406,7 +438,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 }
 
 
-
                 realEstate.setmName(name);
                 realEstate.setmDescription(description);
                 realEstate.setmPictures(imagePath);
@@ -425,12 +456,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                     boolean toast = preferences.getBoolean(NOTIF_TOAST, false);
                     boolean status = preferences.getBoolean(NOTIF_STATUS, false);
 
-                    if (toast){
-                        Toast.makeText(SecondActivity.this, "Podaci o glumcu su promenjeni" , Toast.LENGTH_SHORT).show();
+                    if (toast) {
+                        Toast.makeText(SecondActivity.this, "Real Estate is updated", Toast.LENGTH_SHORT).show();
                     }
 
-                    if (status){
-                        showStatusMesage("Podaci o glumcu su promenjeni");
+                    if (status) {
+                        showStatusMesage("Real Estate is updated");
                     }
 
 
@@ -442,11 +473,8 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
                 dialog.dismiss();
 
-
-
             }
         });
-
 
         // cancel
         Button cancel = (Button) dialog.findViewById(R.id.btn_cancel);
@@ -459,8 +487,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         dialog.show();
 
-
     }
+
+
+
+
+
 
 
     // //provera podesavanja (toast ili notification bar) .... ovo pozivamo kada kliknemo na ikonicu u Tolbaru
@@ -477,6 +509,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             showStatusMesage(message);
         }
     }
+
+
+
+
+
+
 
     // prikazivanje poruka u notification baru (status bar)
     private void showStatusMesage(String message) {
@@ -496,7 +534,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
 
 
-        // metoda za izbor slike
+
+
+
+
+
+
+    // metoda za izbor slike
     private void selectPicture() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -530,6 +574,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
 
 
+
+
+
+
+
+
     //Metoda koja komunicira sa bazom podataka
     public DatabaseHelper getDatabaseHelper() {
         if (databaseHelper == null) {
@@ -537,6 +587,34 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         }
         return databaseHelper;
     }
+
+
+
+
+    // pokretanje phone aplikacije   .... salje neki cudan broj a ne ovaj iz Stringa ???
+    public void call(View v) {
+
+        String stringPhone = Integer.toString(R.id.input_realestate_phone);
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", stringPhone, null));
+
+        //callIntent.setData(Uri.parse(stringPhone));
+
+        //provera permissiona
+        if (ActivityCompat.checkSelfPermission(SecondActivity.this,android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(SecondActivity.this,
+                    android.Manifest.permission.CALL_PHONE)) {
+            } else {
+                ActivityCompat.requestPermissions(SecondActivity.this,
+                        new String[]{android.Manifest.permission.CALL_PHONE},
+                        MY_PERMISSIONS_REQUEST_CALL_PHONE);
+            }
+        }
+        startActivity(callIntent);
+    }
+
+
+
+
 
     @Override
     protected void onDestroy() {
