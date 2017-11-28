@@ -43,8 +43,7 @@ import rs.aleph.android.example13.activities.db.DatabaseHelper;
 import rs.aleph.android.example13.activities.db.model.RealEstate;
 
 
-import static android.R.attr.y;
-import static rs.aleph.android.example13.R.string.save;
+
 import static rs.aleph.android.example13.activities.activity.FirstActivity.NOTIF_TOAST;
 import static rs.aleph.android.example13.activities.activity.FirstActivity.NOTIF_STATUS;
 
@@ -591,13 +590,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
 
 
-    // pokretanje phone aplikacije   .... salje neki cudan broj a ne ovaj iz Stringa ???
+    // pokretanje phone aplikacije
     public void call(View v) {
 
-        String stringPhone = Integer.toString(R.id.input_realestate_phone);
+        int phone = realEstate.getmPhone();
+        String stringPhone = Integer.toString(phone);
         Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", stringPhone, null));
 
-        //callIntent.setData(Uri.parse(stringPhone));
 
         //provera permissiona
         if (ActivityCompat.checkSelfPermission(SecondActivity.this,android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -609,9 +608,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                         MY_PERMISSIONS_REQUEST_CALL_PHONE);
             }
         }
+
         startActivity(callIntent);
     }
-
 
 
 
